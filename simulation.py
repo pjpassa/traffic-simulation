@@ -39,6 +39,6 @@ class Simulation:
         return [car.location for car in self.car_list]
 
     @property
-    def current_average_speed(self):
-        return st.mean([car.speed for car in self.car_list])
+    def current_speeds(self):
+        return [car.speed for car in self.car_list]
 
