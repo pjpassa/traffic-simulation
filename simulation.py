@@ -1,5 +1,8 @@
 import random
+import statistics as st
 import numpy as np
+from road import Road
+from car import Car
 
 
 class Simulation:
@@ -11,9 +14,9 @@ class Simulation:
         random.shuffle(car_types)
         self.car_list = []
         total_cars = 0
-        for percent_car in range(len(car_types)):
-            percent_car[0] *= num_cars
-            total_cars += int(percent_car[0])
+        for percent_car in car_types:
+            percent_car[0] = int(percent_car[0] * num_cars)
+            total_cars += percent_car[0]
         for _ in range(num_cars - total_cars):
             car_types[random.randint(0, len(car_types) - 1)][0] += 1
         for car_count, car_class in car_types:
@@ -32,5 +35,10 @@ class Simulation:
         pass
 
     @property
-    def current_state(self):
-        pass
+    def current_positions(self):
+        return [car.location for car in self.car_list]
+
+    @property
+    def current_average_speed(self):
+        return st.mean([car.speed for car in self.car_list])
+
