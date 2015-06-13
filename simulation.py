@@ -1,15 +1,16 @@
 import random
-import statistics as st
 import numpy as np
 from road import Road
 from car import Car
+from driver import Driver
 
 
 class Simulation:
 
     # car_types example = [[1, Car, 5, "basic"]]
-    def __init__(self, road, drivers, car_types, tick_interval=1):
+    def __init__(self, road, drivers, car_types, speed_limit=200, tick_interval=1):
         self.road = road
+        self.speed_limit = speed_limit / 3.6
         self.drivers = {str(driver): driver for driver in drivers}
         num_cars = int(self.road.length * 30 / 1000)
         random.shuffle(car_types)
@@ -27,6 +28,7 @@ class Simulation:
         for position, car in enumerate(self.car_list):
             car.location = int(position * road.length / total_cars)
             car.next_car = self.car_list[(position + 1) % len(self.car_list)]
+            car.speed = self.speed_limit/2
         self.tick_interval = tick_interval
 
     def run(self, time=60):
@@ -43,7 +45,7 @@ class Simulation:
     def update(self):
         # update speeds
         for car in self.car_list:
-            self.drivers[car.driver].update(self.tick_interval, car, self.road)
+            self.drivers[car.driver].update(self.tick_interval, car, self.road, self.speed_limit)
         # move cars
         for car in self.car_list:
             car.update(self.tick_interval, self.road.length)
@@ -55,3 +57,15 @@ class Simulation:
     @property
     def current_speeds(self):
         return [car.speed for car in self.car_list]
+
+if __name__ == "__main__":
+    road = Road(1)
+    drivers = [Driver()]
+    car_types = [[1, Car, 5, "basic"]]
+    sim = Simulation(road, drivers, car_types)
+    speed_results, location_results, time_results = sim.run()
+    print(speed_results)
+    input("Press Enter to continue")
+    print(location_results)
+    input("Press Enter to continue")
+    print(time_results)

@@ -1,8 +1,8 @@
 
 class Road:
 
-    def __init__(self, length, deceleration_ratios=((0, 1))):
-        self.length = length
+    def __init__(self, length, deceleration_ratios=[(0, 1)]):
+        self.length = length * 1000
         self.deceleration_ratios = deceleration_ratios
 
     def get_decel_ratio(self, location):
