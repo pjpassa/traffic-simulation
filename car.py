@@ -1,7 +1,11 @@
 
 class Car:
-    name = "Tesla"
 
+    def __init_(self, length=5, driver="basic"):
+        self.location = 0
+        self.length = length
+        self.next_car = self
+        self.driver = driver
 
-class Car2(Car):
-    name = "Dodge"
+    def update(self, dt):
+        pass

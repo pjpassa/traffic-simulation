@@ -9,7 +9,7 @@ class Simulation:
 
     def __init__(self, road, drivers, car_types, tick_interval=1):
         self.road = road
-        self.drivers = drivers
+        self.drivers = {str(driver): driver for driver in drivers}
         num_cars = int(self.road.length * 30 / 1000)
         random.shuffle(car_types)
         self.car_list = []
@@ -25,6 +25,7 @@ class Simulation:
         random.shuffle(self.car_list)
         for position, car in enumerate(self.car_list):
             car.location = int(position * road.length / total_cars)
+            car.next_car = self.car_list[(position + 1)%len(self.car_list)]
         self.tick_interval = tick_interval
 
 
@@ -32,7 +33,13 @@ class Simulation:
         pass
 
     def update(self):
-        pass
+        # update speeds
+        for car in self.car_list:
+            self.drivers[car.driver].update(car, self.tick_interval)
+        # move cars
+        for car in self.car_list:
+            car.update(self.tick_interval)
+
 
     @property
     def current_positions(self):
