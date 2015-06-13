@@ -1,7 +1,7 @@
 
 class Road:
 
-    def __init__(self, length, deceleration_ratios=[(0, 1)]):
+    def __init__(self, length, deceleration_ratios=((0, 1))):
         self.length = length
         self.deceleration_ratios = deceleration_ratios
 

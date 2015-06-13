@@ -14,9 +14,14 @@ class Driver:
         return self.name
 
     def update(self, dt, car, road):
-        if (car.next_car.location + road.length) % road.length - car.location < self.min_spacing(car):
-            car.speed = car.next_car.speed
-            return
+        if car.next_car.location < car.location:
+            if car.next_car.location + road.length - car.location < self.min_spacing(car):
+                car.speed = car.next_car.speed
+                return
+        else:
+            if car.next_car.location - car.location < self.min_spacing(car):
+                car.speed = car.next_car.speed
+                return
         if random.random()*dt < self.decel_rate * road.get_decel_ratio(car.location):
             car.speed -= self.decel_rate*dt
             return

@@ -26,12 +26,19 @@ class Simulation:
         random.shuffle(self.car_list)
         for position, car in enumerate(self.car_list):
             car.location = int(position * road.length / total_cars)
-            car.next_car = self.car_list[(position + 1)%len(self.car_list)]
+            car.next_car = self.car_list[(position + 1) % len(self.car_list)]
         self.tick_interval = tick_interval
 
-
-    def run(self):
-        pass
+    def run(self, time=60):
+        speeds = np.array([self.current_speeds])
+        states = np.array([self.current_positions])
+        times = [0]
+        for i in range(int(time/self.tick_interval)):
+            self.update()
+            speeds = np.vstack((speeds, self.current_speeds))
+            states = np.vstack((states, self.current_positions))
+            times.append((i + 1) * self.tick_interval)
+        return (speeds, states, times)
 
     def update(self):
         # update speeds
@@ -39,8 +46,7 @@ class Simulation:
             self.drivers[car.driver].update(self.tick_interval, car, self.road)
         # move cars
         for car in self.car_list:
-            car.update(self.tick_interval)
-
+            car.update(self.tick_interval, self.road.length)
 
     @property
     def current_positions(self):
@@ -49,4 +55,3 @@ class Simulation:
     @property
     def current_speeds(self):
         return [car.speed for car in self.car_list]
-

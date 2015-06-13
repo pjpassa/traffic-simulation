@@ -8,5 +8,5 @@ class Car:
         self.driver = driver
         self.speed = 0
 
-    def update(self, dt):
-        pass
+    def update(self, dt, road_length):
+        self.location = (self.location + self.speed*dt) % road_length
