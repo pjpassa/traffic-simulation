@@ -6,7 +6,7 @@ class Car:
         self.length = length
         self.next_car = self
         self.driver = driver
-        self.speed = 20
+        self.speed = 0
 
     def update(self, dt, road_length):
         self.location = (self.location + self.speed*dt) % road_length

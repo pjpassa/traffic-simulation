@@ -28,18 +28,18 @@ class Simulation:
         for position, car in enumerate(self.car_list):
             car.location = int(position * road.length / total_cars)
             car.next_car = self.car_list[(position + 1) % len(self.car_list)]
-            car.speed = self.speed_limit/2
+            car.speed = min([self.speed_limit, self.drivers[car.driver].desired_speed])
         self.tick_interval = tick_interval
 
     def run(self, time=60):
         speeds = np.array([self.current_speeds])
         states = np.array([self.current_positions])
-        times = [0]
+        times = np.array([0 for _ in range(len(self.car_list))])
         for i in range(int(time/self.tick_interval)):
             self.update()
             speeds = np.vstack((speeds, self.current_speeds))
             states = np.vstack((states, self.current_positions))
-            times.append((i + 1) * self.tick_interval)
+            times = np.vstack((times, [(i + 1) * self.tick_interval for _ in range(len(self.car_list))]))
         return (speeds, states, times)
 
     def update(self):
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     drivers = [Driver()]
     car_types = [[1, Car, 5, "basic"]]
     sim = Simulation(road, drivers, car_types)
-    speed_results, location_results, time_results = sim.run()
+    speed_results, location_results, time_results = sim.run(300)
     print(speed_results)
     input("Press Enter to continue")
     print(location_results)
