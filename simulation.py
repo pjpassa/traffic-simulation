@@ -7,6 +7,7 @@ from car import Car
 
 class Simulation:
 
+    # car_types example = [[1, Car, 5, "basic"]]
     def __init__(self, road, drivers, car_types, tick_interval=1):
         self.road = road
         self.drivers = {str(driver): driver for driver in drivers}
@@ -19,9 +20,9 @@ class Simulation:
             total_cars += percent_car[0]
         for _ in range(num_cars - total_cars):
             car_types[random.randint(0, len(car_types) - 1)][0] += 1
-        for car_count, car_class in car_types:
+        for car_count, car_class, car_length, car_driver in car_types:
             for _ in range(car_count):
-                self.car_list.append(car_class())
+                self.car_list.append(car_class(car_length, car_driver))
         random.shuffle(self.car_list)
         for position, car in enumerate(self.car_list):
             car.location = int(position * road.length / total_cars)
@@ -35,7 +36,7 @@ class Simulation:
     def update(self):
         # update speeds
         for car in self.car_list:
-            self.drivers[car.driver].update(car, self.tick_interval)
+            self.drivers[car.driver].update(self.tick_interval, car, self.road)
         # move cars
         for car in self.car_list:
             car.update(self.tick_interval)

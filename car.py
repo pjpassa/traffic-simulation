@@ -6,6 +6,7 @@ class Car:
         self.length = length
         self.next_car = self
         self.driver = driver
+        self.speed = 0
 
     def update(self, dt):
         pass
